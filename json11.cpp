@@ -785,6 +785,19 @@ Json Json::parse_file(const std::string& Filename)
   return Json::parse(strParameters, strbuf);
 }
 
+Json Json::parse_object_files(const std::vector<std::string>& Filename)
+{
+  object obj;
+  for (const auto& name : Filename) {
+    Json new_object = parse_file(name);
+    if (!new_object.is_object()) {
+      throw std::runtime_error("Json is not an object");
+    }
+    obj.insert(new_object.object_items().begin(), new_object.object_items().end());
+  }
+  return Json(obj);
+}
+
 /* * * * * * * * * * * * * * * * * * * *
  * Shape-checking
  */
