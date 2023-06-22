@@ -25,23 +25,6 @@ endif()
 add_library(json11 json11.cpp)
 target_include_directories(json11 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_options(json11
-  PRIVATE -fPIC -fno-rtti -fno-exceptions -Wall)
-
-configure_file("json11.pc.in" "json11.pc" @ONLY)
-
-if (JSON11_BUILD_TESTS)
-
-  # enable test for DR1467, described here: https://llvm.org/bugs/show_bug.cgi?id=23812
-  if(JSON11_ENABLE_DR1467_CANARY)
-    add_definitions(-D JSON11_ENABLE_DR1467_CANARY=1)
-  else()
-    add_definitions(-D JSON11_ENABLE_DR1467_CANARY=0)
-  endif()
-
-  add_executable(json11_test test.cpp)
-  target_link_libraries(json11_test json11)
-endif()
+  PRIVATE -fPIC -fno-rtti -Wall)
 
 install(TARGETS json11 DESTINATION lib/${CMAKE_LIBRARY_ARCHITECTURE})
-install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/json11.hpp" DESTINATION include/${CMAKE_LIBRARY_ARCHITECTURE})
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/json11.pc" DESTINATION lib/${CMAKE_LIBRARY_ARCHITECTURE}/pkgconfig)

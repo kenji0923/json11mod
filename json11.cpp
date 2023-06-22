@@ -25,6 +25,9 @@
 #include <cstdlib>
 #include <cstdio>
 #include <limits>
+#include <fstream>
+#include <exception>
+#include <sstream>
 
 namespace json11 {
 
@@ -763,6 +766,19 @@ vector<Json> Json::parse_multi(const string &in,
         parser_stop_pos = parser.i;
     }
     return json_vec;
+}
+
+Json Json::parse_file(const std::string& Filename)
+{
+  std::ifstream ifs(Filename.c_str());
+  if (!ifs.good()) {
+    std::stringstream ss;
+    ss << "Json file cannot be opened";
+    throw std::runtime_error(ss.str());
+  }
+  std::string strbuf, strParameters;
+  while (ifs >> strbuf) strParameters += strbuf;
+  return Json::parse(strParameters, strbuf);
 }
 
 /* * * * * * * * * * * * * * * * * * * *

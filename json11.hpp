@@ -188,6 +188,7 @@ public:
         std::string::size_type parser_stop_pos;
         return parse_multi(in, parser_stop_pos, err, strategy);
     }
+    static Json parse_file(const std::string& Filename);
 
     bool operator== (const Json &rhs) const;
     bool operator<  (const Json &rhs) const;
