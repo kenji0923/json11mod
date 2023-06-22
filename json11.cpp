@@ -34,6 +34,7 @@ namespace json11 {
 static const int max_depth = 200;
 
 using std::string;
+using std::istringstream;
 using std::vector;
 using std::map;
 using std::make_shared;
@@ -198,6 +199,7 @@ public:
 };
 
 class JsonString final : public Value<Json::STRING, string> {
+    std::complex<double> complex_value() const override { std::complex<double> c;istringstream is(m_value);is >> c; return c; }
     const string &string_value() const override { return m_value; }
 public:
     explicit JsonString(const string &value) : Value(value) {}
@@ -272,6 +274,7 @@ Json::Json(Json::object &&values)      : m_ptr(make_shared<JsonObject>(move(valu
 
 Json::Type Json::type()                           const { return m_ptr->type();         }
 double Json::number_value()                       const { return m_ptr->number_value(); }
+std::complex<double> Json::complex_value()         const { return m_ptr->complex_value(); }
 int Json::int_value()                             const { return m_ptr->int_value();    }
 bool Json::bool_value()                           const { return m_ptr->bool_value();   }
 const string & Json::string_value()               const { return m_ptr->string_value(); }
@@ -281,6 +284,7 @@ const Json & Json::operator[] (size_t i)          const { return (*m_ptr)[i];   
 const Json & Json::operator[] (const string &key) const { return (*m_ptr)[key];         }
 
 double                    JsonValue::number_value()              const { return 0; }
+std::complex<double>      JsonValue::complex_value()             const { return 0; }
 int                       JsonValue::int_value()                 const { return 0; }
 bool                      JsonValue::bool_value()                const { return false; }
 const string &            JsonValue::string_value()              const { return statics().empty_string; }
@@ -773,7 +777,7 @@ Json Json::parse_file(const std::string& Filename)
   std::ifstream ifs(Filename.c_str());
   if (!ifs.good()) {
     std::stringstream ss;
-    ss << "Json file cannot be opened";
+    ss << "Parameter file cannot be opened";
     throw std::runtime_error(ss.str());
   }
   std::string strbuf, strParameters;

@@ -55,6 +55,7 @@
 #include <map>
 #include <memory>
 #include <initializer_list>
+#include <complex>
 
 #ifdef _MSC_VER
     #if _MSC_VER <= 1800 // VS 2013
@@ -136,6 +137,7 @@ public:
     // distinguish between integer and non-integer numbers - number_value() and int_value()
     // can both be applied to a NUMBER-typed object.
     double number_value() const;
+    std::complex<double> complex_value() const; // by string, "(REAL,IMAG)" can be parsed
     int int_value() const;
 
     // Return the enclosed value if this is a boolean, false otherwise.
@@ -215,11 +217,13 @@ protected:
     friend class Json;
     friend class JsonInt;
     friend class JsonDouble;
+    friend class JsonComplex;
     virtual Json::Type type() const = 0;
     virtual bool equals(const JsonValue * other) const = 0;
     virtual bool less(const JsonValue * other) const = 0;
     virtual void dump(std::string &out) const = 0;
     virtual double number_value() const;
+    virtual std::complex<double> complex_value() const;
     virtual int int_value() const;
     virtual bool bool_value() const;
     virtual const std::string &string_value() const;
